@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refilled · Color System</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Pretendard", system-ui, sans-serif;
+  color: #0a0a0a;
+  background: #ffffff;
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+
+/* Top Nav */
+.topnav {
+  position: sticky; top: 0;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 0.5px solid #e5e5e5;
+  z-index: 100;
+  padding: 16px 0;
+}
+.topnav .container { display: flex; justify-content: space-between; align-items: center; }
+.topnav .brand { font-size: 20px; font-weight: 500; letter-spacing: -0.02em; }
+.topnav .nav-meta { display: flex; gap: 24px; align-items: center; }
+.topnav .nav-meta a { font-size: 11px; color: #6b6b6b; text-decoration: none; letter-spacing: 0.04em; }
+.topnav .nav-meta a:hover { color: #0a0a0a; }
+.topnav .version { font-size: 10px; color: #9b9b9b; letter-spacing: 0.08em; text-transform: uppercase; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+/* Hero */
+.hero { padding: 120px 0 100px; }
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.18em; color: #6b6b6b; text-transform: uppercase; margin-bottom: 28px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.hero-title { font-size: 88px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; margin-bottom: 32px; }
+.hero-title em { font-style: normal; color: #0072EC; }
+.hero-sub { font-size: 24px; color: #3b3b3b; font-weight: 400; margin-bottom: 56px; max-width: 700px; letter-spacing: -0.01em; }
+.hero-desc { font-size: 14px; color: #6b6b6b; line-height: 1.8; max-width: 500px; }
+
+/* Section */
+.section { padding: 100px 0; border-top: 0.5px solid #e5e5e5; }
+.section-eyebrow { font-size: 11px; letter-spacing: 0.18em; color: #6b6b6b; margin-bottom: 16px; font-family: ui-monospace, "SF Mono", Menlo, monospace; text-transform: uppercase; }
+.section-title { font-size: 44px; font-weight: 500; letter-spacing: -0.032em; line-height: 1.15; margin-bottom: 28px; max-width: 900px; }
+.section-lead { font-size: 17px; color: #4b4b4b; max-width: 720px; margin-bottom: 64px; line-height: 1.7; }
+
+/* Axis Cards */
+.axis-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px; }
+.axis-card { background: #fafafa; padding: 40px; border-radius: 8px; position: relative; overflow: hidden; }
+.axis-card::before { content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%; background: #0072EC; }
+.axis-card:nth-child(2)::before { background: #0a0a0a; }
+.axis-label { font-size: 10px; letter-spacing: 0.15em; color: #6b6b6b; text-transform: uppercase; margin-bottom: 16px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.axis-title { font-size: 28px; font-weight: 500; margin-bottom: 16px; letter-spacing: -0.02em; }
+.axis-desc { font-size: 15px; color: #4b4b4b; line-height: 1.7; }
+.section-note { font-size: 14px; color: #6b6b6b; padding: 20px 24px; background: #f5f5f5; border-radius: 6px; }
+
+/* Zone Cards */
+.zone-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.zone-card { background: #fafafa; border-radius: 8px; padding: 32px; }
+.zone-label { font-size: 11px; letter-spacing: 0.12em; color: #6b6b6b; text-transform: uppercase; margin-bottom: 12px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.zone-name { font-size: 26px; font-weight: 500; margin-bottom: 6px; letter-spacing: -0.02em; }
+.zone-family { font-size: 13px; color: #6b6b6b; margin-bottom: 24px; }
+.zone-signature { width: 100%; height: 100px; border-radius: 6px; margin-bottom: 20px; }
+.zone-signature.pale { border: 0.5px solid rgba(0,0,0,0.1); }
+.zone-hex { font-size: 11px; color: #6b6b6b; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.04em; margin-bottom: 4px; }
+.zone-signature-name { font-size: 13px; color: #0a0a0a; font-weight: 500; }
+.zone-family-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-top: 20px; }
+.zone-family-strip > div { height: 28px; border-radius: 3px; }
+.zone-family-strip > div.pale { border: 0.5px solid rgba(0,0,0,0.08); }
+
+/* Intensity Arc */
+.arc-meta { display: flex; justify-content: space-between; margin-bottom: 16px; }
+.arc-axis-label { font-size: 11px; color: #6b6b6b; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.06em; }
+.arc-strip { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+.arc-cell { display: flex; flex-direction: column; }
+.arc-bar { height: 140px; border-radius: 4px; margin-bottom: 12px; transition: transform 0.2s; }
+.arc-bar:hover { transform: translateY(-4px); }
+.arc-bar.hero { box-shadow: 0 0 0 2px #0a0a0a; }
+.arc-bar.pale { border: 0.5px solid rgba(0,0,0,0.1); }
+.arc-step-num { font-size: 10px; color: #9b9b9b; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.04em; text-align: center; margin-bottom: 3px; }
+.arc-step-name { font-size: 11px; color: #0a0a0a; font-weight: 500; text-align: center; margin-bottom: 2px; }
+.arc-step-hex { font-size: 9px; color: #9b9b9b; font-family: ui-monospace, "SF Mono", Menlo, monospace; text-align: center; }
+.arc-step-pos { font-size: 9px; color: #6b6b6b; text-align: center; margin-top: 2px; font-style: italic; }
+
+/* 3 Questions */
+.q-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 60px; }
+.q-card { background: #fafafa; padding: 36px 32px; border-radius: 8px; }
+.q-number { font-size: 13px; color: #0072EC; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-bottom: 16px; letter-spacing: 0.04em; }
+.q-question { font-size: 18px; font-weight: 500; margin-bottom: 12px; letter-spacing: -0.015em; line-height: 1.4; color: #0a0a0a; }
+.q-arrow { font-size: 14px; color: #6b6b6b; margin: 10px 0; }
+.q-answer { font-size: 14px; color: #6b6b6b; line-height: 1.6; }
+.q-table { width: 100%; margin-top: 56px; border-collapse: collapse; }
+.q-table th { text-align: left; font-size: 11px; letter-spacing: 0.1em; color: #6b6b6b; text-transform: uppercase; padding: 12px 16px; border-bottom: 0.5px solid #e5e5e5; font-weight: 500; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.q-table td { padding: 16px; font-size: 13px; border-bottom: 0.5px solid #f0f0f0; color: #3b3b3b; }
+.q-table td.range { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: #6b6b6b; font-size: 12px; }
+.q-table tbody tr:hover { background: #fafafa; }
+
+/* Type Modulation */
+.mod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 60px; }
+.mod-card { display: flex; flex-direction: column; }
+.mod-bar { width: 100%; height: 180px; border-radius: 6px; margin-bottom: 16px; }
+.mod-bar.hero { box-shadow: 0 0 0 2px #0a0a0a; }
+.mod-label { font-size: 11px; letter-spacing: 0.1em; color: #6b6b6b; text-transform: uppercase; margin-bottom: 6px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.mod-name { font-size: 18px; font-weight: 500; margin-bottom: 4px; letter-spacing: -0.015em; }
+.mod-hex { font-size: 11px; color: #9b9b9b; font-family: ui-monospace, "SF Mono", Menlo, monospace; margin-bottom: 8px; }
+.mod-shift { font-size: 12px; color: #6b6b6b; line-height: 1.5; }
+.mod-note { background: #fafafa; padding: 24px 28px; border-radius: 6px; font-size: 14px; color: #4b4b4b; line-height: 1.6; }
+.mod-note strong { color: #0a0a0a; font-weight: 500; }
+
+/* Product Mockups */
+.products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.pkg { position: relative; background: #fff; border: 0.5px solid #d0d0cf; height: 380px; padding: 14px; overflow: hidden; }
+.pkg-word { font-size: 22px; font-weight: 500; color: #0a0a0a; line-height: 1; letter-spacing: -0.025em; margin: 4px 0 14px; }
+.pkg-body { display: flex; gap: 8px; }
+.pkg-mark { width: 16px; height: 16px; flex-shrink: 0; }
+.pkg-info { flex: 1; padding-left: 6px; }
+.pkg-name { font-size: 12px; font-weight: 500; color: #0a0a0a; line-height: 1.3; }
+.pkg-catrow { display: flex; align-items: center; gap: 6px; margin-top: 12px; }
+.pkg-cat { font-size: 13px; font-weight: 500; color: #0a0a0a; }
+.pkg-sub { font-size: 11px; color: #b0b0b0; line-height: 1.4; margin-top: 8px; padding-left: 22px; }
+.pkg-bar { position: absolute; left: 12px; bottom: 36px; width: 26px; height: 200px; }
+.pkg-bar.pale { border: 0.5px solid rgba(0,0,0,0.12); }
+.pkg-step { position: absolute; bottom: 10px; left: 44px; font-size: 9px; color: #9b9b9b; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: 0.05em; }
+.pkg-vol { position: absolute; bottom: 8px; right: 12px; font-size: 10px; color: #0a0a0a; }
+
+/* Scenarios */
+.scenario-list { display: flex; flex-direction: column; gap: 24px; }
+.scenario { background: #fafafa; border-radius: 10px; padding: 36px; }
+.scenario-tag { display: inline-block; font-size: 10px; letter-spacing: 0.12em; color: #fff; background: #0072EC; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; margin-bottom: 16px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.scenario-tag.type { background: #45B0E8; }
+.scenario-tag.concern { background: #D85B5B; }
+.scenario-title { font-size: 22px; font-weight: 500; margin-bottom: 12px; letter-spacing: -0.018em; }
+.scenario-desc { font-size: 14px; color: #4b4b4b; line-height: 1.7; margin-bottom: 24px; max-width: 800px; }
+.scenario-vis { display: flex; gap: 8px; align-items: center; }
+.scenario-pkg { width: 88px; height: 130px; background: #fff; border: 0.5px solid #d0d0cf; position: relative; flex-shrink: 0; }
+.scenario-pkg-word { font-size: 9px; font-weight: 500; padding: 6px 6px 0; letter-spacing: -0.02em; color: #0a0a0a; }
+.scenario-pkg-bar { position: absolute; left: 6px; bottom: 8px; width: 12px; height: 70px; }
+.scenario-pkg-bar.pale { border: 0.5px solid rgba(0,0,0,0.1); }
+.scenario-pkg-step { position: absolute; bottom: 4px; right: 6px; font-size: 7px; color: #9b9b9b; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.scenario-arrow { color: #9b9b9b; font-size: 12px; }
+
+/* Rules */
+.rules-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 32px; }
+.rule { display: flex; gap: 16px; padding: 14px 0; border-bottom: 0.5px solid #f0f0f0; }
+.rule-num { flex-shrink: 0; font-size: 11px; color: #0072EC; font-family: ui-monospace, "SF Mono", Menlo, monospace; padding-top: 2px; letter-spacing: 0.04em; min-width: 24px; }
+.rule-text { font-size: 14px; color: #3b3b3b; line-height: 1.55; }
+.rule-text strong { color: #0a0a0a; font-weight: 500; }
+
+/* Outcome */
+.outcome-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 32px; }
+.outcome-card { background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%); padding: 36px; border-radius: 10px; }
+.outcome-num { font-size: 32px; font-weight: 500; color: #0072EC; margin-bottom: 16px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.outcome-name { font-size: 19px; font-weight: 500; margin-bottom: 10px; letter-spacing: -0.015em; }
+.outcome-desc { font-size: 13px; color: #6b6b6b; line-height: 1.7; }
+
+/* Footer */
+.footer { padding: 60px 0; border-top: 0.5px solid #e5e5e5; background: #fafafa; }
+.footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-brand { font-size: 16px; font-weight: 500; letter-spacing: -0.02em; }
+.footer-meta { font-size: 11px; color: #9b9b9b; letter-spacing: 0.04em; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container { padding: 0 24px; }
+  .hero { padding: 80px 0 60px; }
+  .hero-title { font-size: 56px; }
+  .hero-sub { font-size: 18px; }
+  .section { padding: 60px 0; }
+  .section-title { font-size: 32px; }
+  .axis-grid, .zone-grid, .q-grid, .products-grid, .outcome-grid { grid-template-columns: 1fr; }
+  .arc-strip { grid-template-columns: repeat(5, 1fr); }
+  .mod-grid { grid-template-columns: repeat(2, 1fr); }
+  .rules-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="container">
+    <div class="brand">Refilled</div>
+    <div class="nav-meta">
+      <a href="#overview">System</a>
+      <a href="#zones">Zones</a>
+      <a href="#arc">Arc</a>
+      <a href="#rules">Rules</a>
+      <a href="#type">Type</a>
+      <a href="#products">Products</a>
+      <a href="#scenarios">Shelf</a>
+      <span class="version">Color · v3</span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <p class="hero-eyebrow">Refilled Color System</p>
+    <h1 class="hero-title">두피관리 = <em>리필드</em></h1>
+    <p class="hero-sub">0~10 루틴을 따르면 두피 고민 끝.</p>
+    <p class="hero-desc">이 메시지를 패키지 컬러로 시각화하기 위한 이중축 컬러 시스템. 단일 컬러 브랜딩이 아니라, <strong style="color:#0a0a0a;font-weight:500;">시스템 자체가 브랜드 언어가 되는 구조</strong>.</p>
+  </div>
+</header>
+
+<section class="section" id="overview">
+  <div class="container">
+    <p class="section-eyebrow">01 · System</p>
+    <h2 class="section-title">이중축 컬러 시스템</h2>
+    <p class="section-lead">컬러 하나에 의존하지 않고, 두 가지 축이 동시에 작동해 한 패키지 안에서 라인업과 타입을 함께 전달합니다.</p>
+
+    <div class="axis-grid">
+      <div class="axis-card">
+        <p class="axis-label">가로축 — Horizontal</p>
+        <h3 class="axis-title">라인업 (Lineup)</h3>
+        <p class="axis-desc">Step마다 고유한 라인업 컬러. Body Zone(사용 부위)이 hue 패밀리로 1차 분류되고, 한 zone 안의 step 위치가 채도와 명도로 표현된다. "내가 필요한 루틴이 어디인가"를 알려주는 지표.</p>
+      </div>
+      <div class="axis-card">
+        <p class="axis-label">세로축 — Vertical</p>
+        <h3 class="axis-title">타입 (Type)</h3>
+        <p class="axis-desc">한 step 안의 변주는 메인 컬러바의 Hue Modulation으로 표현. 같은 가족 안에서 hue를 살짝 비틀어 type을 표시. "어떤 종류의 변주인가"를 알려주는 장치.</p>
+      </div>
+    </div>
+
+    <div class="section-note">시선의 방향에 따라 <strong style="color:#0a0a0a;font-weight:500;">라인업 인식 → 타입 인식</strong>으로 자연스럽게 이어지도록 설정.</div>
+  </div>
+</section>
+
+<section class="section" id="zones">
+  <div class="container">
+    <p class="section-eyebrow">02 · Body Zone</p>
+    <h2 class="section-title">세 가족 — Body Zone = Hue 패밀리</h2>
+    <p class="section-lead">Hue로 Body Zone을 신호. 매대에서 0.3초 안에 "이건 두피 / 헤어 / 아이래쉬"가 식별됩니다. 같은 zone 안의 변주는 채도와 명도로만 표현해 가족감을 유지.</p>
+
+    <div class="zone-grid">
+
+      <div class="zone-card">
+        <p class="zone-label">두피 · Scalp</p>
+        <h3 class="zone-name">Blue Family</h3>
+        <p class="zone-family">브랜드 시그니처 영역</p>
+        <div class="zone-signature" style="background:#0072EC;"></div>
+        <p class="zone-hex">#0072EC</p>
+        <p class="zone-signature-name">Refilled Blue · 시그니처</p>
+        <div class="zone-family-strip">
+          <div class="pale" style="background:#C5CDD2"></div>
+          <div style="background:#82B0C8"></div>
+          <div style="background:#0072EC"></div>
+          <div style="background:#1F4F8C"></div>
+          <div style="background:#1A2438"></div>
+        </div>
+      </div>
+
+      <div class="zone-card">
+        <p class="zone-label">헤어 · Hair</p>
+        <h3 class="zone-name">Beige Gold</h3>
+        <p class="zone-family">모발 케어 영역</p>
+        <div class="zone-signature" style="background:#C9B497;"></div>
+        <p class="zone-hex">#C9B497</p>
+        <p class="zone-signature-name">Warm Beige · 시그니처</p>
+        <div class="zone-family-strip">
+          <div class="pale" style="background:#F0E5D2"></div>
+          <div style="background:#E0CFB0"></div>
+          <div style="background:#C9B497"></div>
+          <div style="background:#A89567"></div>
+          <div style="background:#4D3F22"></div>
+        </div>
+      </div>
+
+      <div class="zone-card">
+        <p class="zone-label">아이래쉬 · Eyelash</p>
+        <h3 class="zone-name">Green Yellow</h3>
+        <p class="zone-family">인접 카테고리</p>
+        <div class="zone-signature" style="background:#D3E841;"></div>
+        <p class="zone-hex">#D3E841</p>
+        <p class="zone-signature-name">Adjacent · 시그니처</p>
+        <div class="zone-family-strip">
+          <div class="pale" style="background:#EEF3D2"></div>
+          <div style="background:#E2EC95"></div>
+          <div style="background:#D3E841"></div>
+          <div style="background:#A8BE2F"></div>
+          <div style="background:#6E801F"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section" id="arc">
+  <div class="container">
+    <p class="section-eyebrow">03 · Intensity Arc</p>
+    <h2 class="section-title">두피 Blue Family · 10단계 Intensity Arc</h2>
+    <p class="section-lead">한 zone 안에서 step의 작용 강도가 채도와 명도로 변주됩니다. 양 끝은 무채색에 가까운 빈 자리(Empty), 부스터는 채도 정점(Hero), 디바이스는 깊은 무게(Heavy).</p>
+
+    <div class="arc-meta">
+      <span class="arc-axis-label">← Empty / Light</span>
+      <span class="arc-axis-label">Hero Peak</span>
+      <span class="arc-axis-label">Tech / Heavy →</span>
+    </div>
+
+    <div class="arc-strip">
+      <div class="arc-cell">
+        <div class="arc-bar pale" style="background:#C5CDD2;"></div>
+        <div class="arc-step-num">03</div>
+        <div class="arc-step-name">클렌저</div>
+        <div class="arc-step-hex">#C5CDD2</div>
+        <div class="arc-step-pos">Void</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar pale" style="background:#B5CEDE;"></div>
+        <div class="arc-step-num">02</div>
+        <div class="arc-step-name">프렙</div>
+        <div class="arc-step-hex">#B5CEDE</div>
+        <div class="arc-step-pos">Light Prep</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar pale" style="background:#9CC4DC;"></div>
+        <div class="arc-step-num">09</div>
+        <div class="arc-step-name">미스트</div>
+        <div class="arc-step-hex">#9CC4DC</div>
+        <div class="arc-step-pos">Finish</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar" style="background:#82B0C8;"></div>
+        <div class="arc-step-num">04</div>
+        <div class="arc-step-name">리커버리</div>
+        <div class="arc-step-hex">#82B0C8</div>
+        <div class="arc-step-pos">Mid Care</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar" style="background:#4F8BB0;"></div>
+        <div class="arc-step-num">01</div>
+        <div class="arc-step-name">괄사</div>
+        <div class="arc-step-hex">#4F8BB0</div>
+        <div class="arc-step-pos">Active</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar hero" style="background:#0072EC;"></div>
+        <div class="arc-step-num">05</div>
+        <div class="arc-step-name">부스터</div>
+        <div class="arc-step-hex">#0072EC</div>
+        <div class="arc-step-pos"><strong>HERO</strong></div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar" style="background:#0072EC;"></div>
+        <div class="arc-step-num">07</div>
+        <div class="arc-step-name">앰플 Pro</div>
+        <div class="arc-step-hex">#0072EC</div>
+        <div class="arc-step-pos">Peak share</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar" style="background:#1F4F8C;"></div>
+        <div class="arc-step-num">06</div>
+        <div class="arc-step-name">이펙터</div>
+        <div class="arc-step-hex">#1F4F8C</div>
+        <div class="arc-step-pos">Deep SOS</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar" style="background:#3D4956;"></div>
+        <div class="arc-step-num">00</div>
+        <div class="arc-step-name">스캐너</div>
+        <div class="arc-step-hex">#3D4956</div>
+        <div class="arc-step-pos">Observe</div>
+      </div>
+      <div class="arc-cell">
+        <div class="arc-bar" style="background:#1A2438;"></div>
+        <div class="arc-step-num">10</div>
+        <div class="arc-step-name">디바이스</div>
+        <div class="arc-step-hex">#1A2438</div>
+        <div class="arc-step-pos">Tech Heavy</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="rules">
+  <div class="container">
+    <p class="section-eyebrow">04 · Color Decision</p>
+    <h2 class="section-title">컬러는 세 가지 질문으로 결정됩니다</h2>
+    <p class="section-lead">신제품 컬러는 임의가 아니라 의미에서 유도. 세 질문에 답하면 hex가 자동으로 산출됩니다.</p>
+
+    <div class="q-grid">
+      <div class="q-card">
+        <div class="q-number">Q · 01</div>
+        <h3 class="q-question">제품이 어느 신체 영역에 작용하는가?</h3>
+        <p class="q-arrow">→</p>
+        <p class="q-answer"><strong style="color:#0a0a0a;">Hue 선택</strong><br>두피 = Blue / 헤어 = Beige Gold / 아이래쉬 = Green Yellow</p>
+      </div>
+      <div class="q-card">
+        <div class="q-number">Q · 02</div>
+        <h3 class="q-question">얼마나 적극적인 작용인가?</h3>
+        <p class="q-arrow">→</p>
+        <p class="q-answer"><strong style="color:#0a0a0a;">채도 범위 선택</strong><br>채도가 높을수록 적극적인 화학적·물리적 작용. 무엇이 일어나고 있는가를 색의 강도로 알려줌.</p>
+      </div>
+      <div class="q-card">
+        <div class="q-number">Q · 03</div>
+        <h3 class="q-question">손에 들었을 때 어떤 무게감을 가지는가?</h3>
+        <p class="q-arrow">→</p>
+        <p class="q-answer"><strong style="color:#0a0a0a;">명도 범위 선택</strong><br>가벼운 제품은 라이트, 무거운 제품은 다크. 손의 감각과 색의 무게를 일치시킴.</p>
+      </div>
+    </div>
+
+    <table class="q-table">
+      <thead>
+        <tr><th>채도 범위</th><th>에너지 레벨</th><th>적용 Step</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="range">0–12%</td><td>비활성 · 관찰 · 비움</td><td>00 스캐너, 03 클렌저, 10 디바이스</td></tr>
+        <tr><td class="range">12–30%</td><td>Supportive · 부드러운 작용</td><td>02 프렙, 08 트리트먼트, 09 미스트</td></tr>
+        <tr><td class="range">30–50%</td><td>Active · 회복적 작용</td><td>04 리커버리</td></tr>
+        <tr><td class="range">50–80%</td><td>Power · 주요 작용</td><td>01 괄사, 06 이펙터</td></tr>
+        <tr><td class="range">80–100%</td><td>Signature Hero · 정점</td><td>05 부스터, 07 앰플</td></tr>
+      </tbody>
+    </table>
+
+    <table class="q-table" style="margin-top: 24px;">
+      <thead>
+        <tr><th>명도 범위</th><th>무게감</th><th>적용 Step</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="range">80–95%</td><td>Airy · 가벼움 · 비움</td><td>03 클렌저, 09 미스트, 02 프렙</td></tr>
+        <tr><td class="range">65–80%</td><td>Soft · 부드러움 · 서포트</td><td>08 트리트먼트, 04 리커버리</td></tr>
+        <tr><td class="range">45–65%</td><td>Active · 작동 중</td><td>05 부스터, 01 괄사, 07 앰플</td></tr>
+        <tr><td class="range">25–45%</td><td>Intensive · 깊은 작용</td><td>06 이펙터</td></tr>
+        <tr><td class="range">10–25%</td><td>Tech · 무게 · 중력</td><td>00 스캐너, 10 디바이스</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="type">
+  <div class="container">
+    <p class="section-eyebrow">05 · Type Variation</p>
+    <h2 class="section-title">Hue Modulation — 가족 안에서 살짝 비틀기</h2>
+    <p class="section-lead">한 step의 type 변주는 메인 컬러바의 hue를 패밀리 안에서 살짝 비틀어 표현. 메인 바 분할 없이 단일 색상으로 type을 전달.</p>
+
+    <div class="mod-grid">
+      <div class="mod-card">
+        <div class="mod-bar hero" style="background:#0072EC;"></div>
+        <p class="mod-label">Base</p>
+        <h3 class="mod-name">Booster</h3>
+        <p class="mod-hex">#0072EC</p>
+        <p class="mod-shift">시그니처 정점</p>
+      </div>
+      <div class="mod-card">
+        <div class="mod-bar" style="background:#45B0E8;"></div>
+        <p class="mod-label">Cooling</p>
+        <h3 class="mod-name">Booster CL</h3>
+        <p class="mod-hex">#45B0E8</p>
+        <p class="mod-shift">cyan-shift, 더 밝은 쿨한 블루</p>
+      </div>
+      <div class="mod-card">
+        <div class="mod-bar" style="background:#3855D4;"></div>
+        <p class="mod-label">Sensitive</p>
+        <h3 class="mod-name">Booster SN</h3>
+        <p class="mod-hex">#3855D4</p>
+        <p class="mod-shift">violet-shift, 약간 붉은 블루</p>
+      </div>
+      <div class="mod-card">
+        <div class="mod-bar" style="background:#1FA8B0;"></div>
+        <p class="mod-label">Sebum</p>
+        <h3 class="mod-name">Booster SB</h3>
+        <p class="mod-hex">#1FA8B0</p>
+        <p class="mod-shift">teal-shift, 그린계열 블루</p>
+      </div>
+    </div>
+
+    <div class="mod-note"><strong>설계 원리.</strong> 메인 바를 캡으로 분할하거나 보조 요소를 더하지 않고, 바 자체의 hue를 그 패밀리 안에서 비틀어 type을 표현. 모든 변주가 "블루 가족"의 정체성을 유지하면서도 type별 distinctive함을 갖춤. 디자인 순도와 브랜드 시그니처가 동시에 강화됨.</div>
+  </div>
+</section>
+
+<section class="section" id="products">
+  <div class="container">
+    <p class="section-eyebrow">06 · Live</p>
+    <h2 class="section-title">현재 출시 제품</h2>
+    <p class="section-lead">시스템이 실제 패키지에 적용된 모습. 메인 컬러 바가 라인업과 type을 모두 전달합니다.</p>
+
+    <div class="products-grid">
+
+      <div class="pkg">
+        <div class="pkg-word">Refilled</div>
+        <div class="pkg-body">
+          <svg class="pkg-mark" viewBox="0 0 30 30"><line x1="5" y1="15" x2="25" y2="15" stroke="#0a0a0a" stroke-width="2.5"/><line x1="15" y1="5" x2="15" y2="25" stroke="#0a0a0a" stroke-width="2.5"/><circle cx="15" cy="5" r="3" fill="#0a0a0a"/><circle cx="25" cy="15" r="3" fill="#0a0a0a"/><circle cx="5" cy="15" r="3" fill="#0a0a0a"/><circle cx="15" cy="25" r="3" fill="#fff" stroke="#0a0a0a" stroke-width="1.5"/></svg>
+          <div class="pkg-info">
+            <div class="pkg-name">Amino<br>Scalp Shampoo</div>
+            <div class="pkg-catrow"><span class="pkg-cat">Cleanser</span></div>
+            <div class="pkg-sub">Daily Reset<br>Cleansing</div>
+          </div>
+        </div>
+        <div class="pkg-bar pale" style="background:#C5CDD2"></div>
+        <div class="pkg-step">03 · 두피</div>
+        <div class="pkg-vol">300ml</div>
+      </div>
+
+      <div class="pkg">
+        <div class="pkg-word">Refilled</div>
+        <div class="pkg-body">
+          <svg class="pkg-mark" viewBox="0 0 30 30"><line x1="5" y1="15" x2="25" y2="15" stroke="#0a0a0a" stroke-width="2.5"/><line x1="15" y1="5" x2="15" y2="25" stroke="#0a0a0a" stroke-width="2.5"/><circle cx="15" cy="5" r="3" fill="#0a0a0a"/><circle cx="25" cy="15" r="3" fill="#0a0a0a"/><circle cx="5" cy="15" r="3" fill="#0a0a0a"/><circle cx="15" cy="25" r="3" fill="#fff" stroke="#0a0a0a" stroke-width="1.5"/></svg>
+          <div class="pkg-info">
+            <div class="pkg-name">Cytokine cADPR<br>Scalp Tonic</div>
+            <div class="pkg-catrow"><span class="pkg-cat">Booster</span></div>
+            <div class="pkg-sub">Scalp Hydration<br>& Hair Loss Care</div>
+          </div>
+        </div>
+        <div class="pkg-bar" style="background:#0072EC"></div>
+        <div class="pkg-step">05 · 두피 · HERO</div>
+        <div class="pkg-vol">70ml</div>
+      </div>
+
+      <div class="pkg">
+        <div class="pkg-word">Refilled</div>
+        <div class="pkg-body">
+          <svg class="pkg-mark" viewBox="0 0 30 30"><line x1="5" y1="15" x2="25" y2="15" stroke="#0a0a0a" stroke-width="2.5"/><line x1="15" y1="5" x2="15" y2="25" stroke="#0a0a0a" stroke-width="2.5"/><circle cx="15" cy="5" r="3" fill="#0a0a0a"/><circle cx="25" cy="15" r="3" fill="#0a0a0a"/><circle cx="5" cy="15" r="3" fill="#0a0a0a"/><circle cx="15" cy="25" r="3" fill="#fff" stroke="#0a0a0a" stroke-width="1.5"/></svg>
+          <div class="pkg-info">
+            <div class="pkg-name">Cytokine cADPR<br>Cooling Tonic</div>
+            <div class="pkg-catrow"><span class="pkg-cat">Booster</span></div>
+            <div class="pkg-sub">Cooling Scalp<br>Refresh</div>
+          </div>
+        </div>
+        <div class="pkg-bar" style="background:#45B0E8"></div>
+        <div class="pkg-step">05 · 두피 · Cooling</div>
+        <div class="pkg-vol">70ml</div>
+      </div>
+
+      <div class="pkg">
+        <div class="pkg-word">Refilled</div>
+        <div class="pkg-body">
+          <svg class="pkg-mark" viewBox="0 0 30 30"><line x1="5" y1="15" x2="25" y2="15" stroke="#0a0a0a" stroke-width="2.5"/><line x1="15" y1="5" x2="15" y2="25" stroke="#0a0a0a" stroke-width="2.5"/><circle cx="15" cy="5" r="3" fill="#0a0a0a"/><circle cx="25" cy="15" r="3" fill="#0a0a0a"/><circle cx="5" cy="15" r="3" fill="#0a0a0a"/><circle cx="15" cy="25" r="3" fill="#fff" stroke="#0a0a0a" stroke-width="1.5"/></svg>
+          <div class="pkg-info">
+            <div class="pkg-name">Hair Loss Crown<br>Scalp Effector</div>
+            <div class="pkg-catrow"><span class="pkg-cat">Effector</span></div>
+            <div class="pkg-sub">Problem Scalp<br>S.O.S Care</div>
+          </div>
+        </div>
+        <div class="pkg-bar" style="background:#1F4F8C"></div>
+        <div class="pkg-step">06 · 두피</div>
+        <div class="pkg-vol">50ml</div>
+      </div>
+
+      <div class="pkg">
+        <div class="pkg-word">Refilled</div>
+        <div class="pkg-body">
+          <svg class="pkg-mark" viewBox="0 0 30 30"><line x1="5" y1="15" x2="25" y2="15" stroke="#0a0a0a" stroke-width="2.5"/><line x1="15" y1="5" x2="15" y2="25" stroke="#0a0a0a" stroke-width="2.5"/><circle cx="15" cy="5" r="3" fill="#0a0a0a"/><circle cx="25" cy="15" r="3" fill="#0a0a0a"/><circle cx="5" cy="15" r="3" fill="#0a0a0a"/><circle cx="15" cy="25" r="3" fill="#fff" stroke="#0a0a0a" stroke-width="1.5"/></svg>
+          <div class="pkg-info">
+            <div class="pkg-name">Keratin Repair<br>Hair Treatment</div>
+            <div class="pkg-catrow"><span class="pkg-cat">Treatment</span></div>
+            <div class="pkg-sub">Hair Repair<br>& Nutrition</div>
+          </div>
+        </div>
+        <div class="pkg-bar" style="background:#C9B497"></div>
+        <div class="pkg-step">08 · 헤어</div>
+        <div class="pkg-vol">200ml</div>
+      </div>
+
+      <div class="pkg">
+        <div class="pkg-word">Refilled</div>
+        <div class="pkg-body">
+          <svg class="pkg-mark" viewBox="0 0 30 30"><line x1="5" y1="15" x2="25" y2="15" stroke="#0a0a0a" stroke-width="2.5"/><line x1="15" y1="5" x2="15" y2="25" stroke="#0a0a0a" stroke-width="2.5"/><circle cx="15" cy="5" r="3" fill="#0a0a0a"/><circle cx="25" cy="15" r="3" fill="#0a0a0a"/><circle cx="5" cy="15" r="3" fill="#0a0a0a"/><circle cx="15" cy="25" r="3" fill="#fff" stroke="#0a0a0a" stroke-width="1.5"/></svg>
+          <div class="pkg-info">
+            <div class="pkg-name">Eyelash<br>Care Serum</div>
+            <div class="pkg-catrow"><span class="pkg-cat">Lash</span></div>
+            <div class="pkg-sub">Eyelash<br>Strengthening</div>
+          </div>
+        </div>
+        <div class="pkg-bar" style="background:#D3E841"></div>
+        <div class="pkg-step">Adjacent · 아이래쉬</div>
+        <div class="pkg-vol">7ml</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section" id="scenarios">
+  <div class="container">
+    <p class="section-eyebrow">07 · Shelf</p>
+    <h2 class="section-title">매대 진열 시나리오</h2>
+    <p class="section-lead">같은 시스템이 매대 배치 logic에 따라 서로 다른 의미 군집을 자연스럽게 만들어냅니다.</p>
+
+    <div class="scenario-list">
+
+      <div class="scenario">
+        <span class="scenario-tag">Routine Order</span>
+        <h3 class="scenario-title">데일리 루틴 진열 — Step 03 → 05 → 08 → 09</h3>
+        <p class="scenario-desc">매대에 라인업 순서대로 배치. 색의 명도 흐름이 루틴의 강도 흐름과 일치하여 소비자가 매대 앞에서 루틴 전체를 학습. 03 비움 → 05 활성 → 08 영양 → 09 세팅.</p>
+        <div class="scenario-vis">
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar pale" style="background:#C5CDD2"></div>
+            <div class="scenario-pkg-step">03</div>
+          </div>
+          <span class="scenario-arrow">→</span>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar" style="background:#0072EC"></div>
+            <div class="scenario-pkg-step">05</div>
+          </div>
+          <span class="scenario-arrow">→</span>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar" style="background:#C9B497"></div>
+            <div class="scenario-pkg-step">08</div>
+          </div>
+          <span class="scenario-arrow">→</span>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar pale" style="background:#9CC4DC"></div>
+            <div class="scenario-pkg-step">09</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario">
+        <span class="scenario-tag type">Type Collection</span>
+        <h3 class="scenario-title">Cooling Collection — 시즌·타입 큐레이션</h3>
+        <p class="scenario-desc">각 step의 base를 cool-shift한 변주들이 자동 군집. "여름 두피 열감 케어" 같은 시즌 큐레이션 매대가 별도 디자인 비용 없이 구성됨. 모두 *블루 가족의 cool-shift된 자매들*.</p>
+        <div class="scenario-vis">
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar pale" style="background:#B8CDDA"></div>
+            <div class="scenario-pkg-step">03 CL</div>
+          </div>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar" style="background:#45B0E8"></div>
+            <div class="scenario-pkg-step">05 CL</div>
+          </div>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar pale" style="background:#A5D5DE"></div>
+            <div class="scenario-pkg-step">09 CL</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario">
+        <span class="scenario-tag concern">Concern Collection</span>
+        <h3 class="scenario-title">Hair Loss Care — 컨선 큐레이션</h3>
+        <p class="scenario-desc">"탈모 케어"라는 컨선을 공유하는 제품들이 5 step을 가로질러 자동 군집. 부스터(05)와 앰플(07)의 Pro 시그니처 블루 + 이펙터(06)의 깊은 블루가 같은 가족 안에서 단계적 강도로 묶임.</p>
+        <div class="scenario-vis">
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar" style="background:#0072EC"></div>
+            <div class="scenario-pkg-step">05</div>
+          </div>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar" style="background:#1F4F8C"></div>
+            <div class="scenario-pkg-step">06</div>
+          </div>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar" style="background:#0072EC"></div>
+            <div class="scenario-pkg-step">07 Pro</div>
+          </div>
+          <div class="scenario-pkg">
+            <div class="scenario-pkg-word">Refilled</div>
+            <div class="scenario-pkg-bar" style="background:#C9B497"></div>
+            <div class="scenario-pkg-step">08</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="section-eyebrow">08 · Master Rules</p>
+    <h2 class="section-title">시스템 룰</h2>
+    <p class="section-lead">신제품·신 cue·미래 확장 모두 이 룰셋 안에서 작동합니다.</p>
+
+    <div class="rules-grid">
+      <div class="rule"><div class="rule-num">01</div><div class="rule-text"><strong>Body Zone = Hue 패밀리.</strong> 두피=Blue, 헤어=Beige Gold, 아이래쉬=Green Yellow. 한 zone 안의 모든 제품은 같은 hue 범위에 머문다.</div></div>
+      <div class="rule"><div class="rule-num">02</div><div class="rule-text"><strong>Intensity Arc = S+L 변주.</strong> 한 zone 안의 step 위치는 arc 위 한 자리.</div></div>
+      <div class="rule"><div class="rule-num">03</div><div class="rule-text"><strong>인접 step 간 L 차이 ≥ 7%, S 차이 ≥ 10%</strong> (식별 가능성 룰).</div></div>
+      <div class="rule"><div class="rule-num">04</div><div class="rule-text"><strong>HERO Peak는 zone당 1~2 제품.</strong> 시그니처 정점 보호.</div></div>
+      <div class="rule"><div class="rule-num">05</div><div class="rule-text"><strong>Type 변주 = Hue Modulation.</strong> 같은 family 안에서 hue를 살짝 비틀어 type 표현.</div></div>
+      <div class="rule"><div class="rule-num">06</div><div class="rule-text"><strong>Cooling = cyan-shift, Sensitive = violet-shift, Sebum = teal-shift.</strong> 모든 zone에서 동일 방향.</div></div>
+      <div class="rule"><div class="rule-num">07</div><div class="rule-text"><strong>베이스 변주는 modulation 없음.</strong> 기본형은 풀 라인업 컬러.</div></div>
+      <div class="rule"><div class="rule-num">08</div><div class="rule-text"><strong>컨선 변주는 Concern Icon 칩.</strong> 빨간 원형 픽토그램으로 컨선 영역 표시.</div></div>
+      <div class="rule"><div class="rule-num">09</div><div class="rule-text"><strong>Pro Lineup은 시그니처 정점 공유.</strong> 부스터+앰플 모두 #0072EC.</div></div>
+      <div class="rule"><div class="rule-num">10</div><div class="rule-text"><strong>Legacy 예외 인정.</strong> 발주된 부스터 쿨링(#78C5FF 풀바)은 시스템 외 표현.</div></div>
+      <div class="rule"><div class="rule-num">11</div><div class="rule-text"><strong>Adjacent 카테고리는 zone hue와 분리.</strong> 아이래쉬는 옐로우-그린 별도 가족.</div></div>
+      <div class="rule"><div class="rule-num">12</div><div class="rule-text"><strong>Step 번호 표시는 보류.</strong> 향후 라벨 옆 보조 정보로 추가.</div></div>
+      <div class="rule"><div class="rule-num">13</div><div class="rule-text"><strong>컬러 부여는 3 질문(§04)으로 유도.</strong> 의미→HSL 매핑.</div></div>
+    </div>
+
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="outcome-num">소비자 직관성</div>
+        <h3 class="outcome-name">색이 곧 의미</h3>
+        <p class="outcome-desc">Hue로 body zone 즉시 인지, 채도·명도로 작용 강도 인지. "라이트한 색 = 가벼운 작용 / 진한 색 = 강한 작용" 직관이 무의식적으로 형성됨.</p>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-num">브랜드 확장성</div>
+        <h3 class="outcome-name">유도 가능한 시스템</h3>
+        <p class="outcome-desc">블루 패밀리 = 리필드 두피라는 등식이 매대에서 자동 구축. 신제품 추가가 zone+arc 결정으로 단순화. 컬러 결정이 임의가 아니라 의미에서 유도됨.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">Refilled</div>
+      <div class="footer-meta">Color System · v3 · 2026</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
